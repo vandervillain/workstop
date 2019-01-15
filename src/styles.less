@@ -1,0 +1,145 @@
+@blue: #00d0ff;
+@blue-shade1: #00deff;
+@blue-shade2: #00a0da;
+@blue-accent: #f0feff;
+
+@tiny: .5rem;
+@small: 1rem;
+@medium: 1.5rem;
+@larger: 2rem;
+@large: 2.25rem;
+@big : 3rem;
+
+body, html {
+    font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 0;
+    margin: 0;
+    font-size: 62.5%;
+}
+
+.container-fluid.lg {
+    max-width: 1600px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.clear {
+    ::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+.checkbox {
+    display: block;
+    float: left;
+    width: @large;
+    height: @large;
+    background-image: url('./glyphicons/glyphicons-basic-153-square-checkbox.svg');
+
+    &.empty {
+        background-image: url('./glyphicons/glyphicons-basic-154-square-empty.svg');
+    }
+}
+
+.App {
+  
+//   .App-logo {
+//     animation: App-logo-spin infinite 20s linear;
+//     height: 80px;
+//   }
+  
+  header {
+    //background-color: #00d0ff;
+    background: linear-gradient(90deg, @blue, @blue-shade1 50%, @blue-shade2);
+    background: webkit-linear-gradient(90deg, @blue, @blue-shade1 50%, @blue-shade2);
+    padding: @medium;
+    margin-bottom: @medium;
+    color: white;
+
+        .logo {
+            float: left;
+
+            h1 {
+                font-size: @large;
+                margin: 0;
+                padding-bottom: 0;
+            }
+        }
+
+        .login {
+            float: right;
+            font-size: @larger;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    }
+
+    .search-page {
+        .search-categories {
+            h1 {
+                font-size: @large;
+                padding-bottom: @medium;
+            }
+            
+            ul {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+
+                li {
+                    font-size: @large;
+                    line-height: @large;
+                    padding: 0 0 @medium 0;
+                    cursor: pointer;
+
+                    span {
+                        margin-left: @small;
+                        clear: right;
+                    }
+                }
+            }
+        }
+
+        .search-options {
+            padding: 0 0 @small 0;
+
+            .search-option-btn {
+                cursor: pointer;
+                border-radius: 3px;
+                color: @blue-shade2;
+                border: 2px solid @blue-shade2;
+                float: left;
+                padding: @tiny @larger;
+                font-size: @medium;
+                font-weight: 600;
+
+                &:hover {
+                    background-color: @blue-accent;
+                }
+            }
+
+            .distance {
+                margin-right: @larger;
+            }
+
+            // .location {
+                
+            // }
+        }
+
+        .search-body {
+            font-size: @medium;
+            padding: @small 0;
+        }
+    }
+  
+    @keyframes App-logo-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+}

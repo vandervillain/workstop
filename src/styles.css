@@ -1,0 +1,100 @@
+body,
+html {
+  font-family: Circular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  font-size: 62.5%;
+}
+.container-fluid.lg {
+  max-width: 1600px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.clear ::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.checkbox {
+  display: block;
+  float: left;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-image: url('./glyphicons/glyphicons-basic-153-square-checkbox.svg');
+}
+.checkbox.empty {
+  background-image: url('./glyphicons/glyphicons-basic-154-square-empty.svg');
+}
+.App header {
+  background: linear-gradient(90deg, #00d0ff, #00deff 50%, #00a0da);
+  background: webkit-linear-gradient(90deg, #00d0ff, #00deff 50%, #00a0da);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+.App header .logo {
+  float: left;
+}
+.App header .logo h1 {
+  font-size: 2.25rem;
+  margin: 0;
+  padding-bottom: 0;
+}
+.App header .login {
+  float: right;
+  font-size: 2rem;
+}
+.App header a {
+  color: white;
+  text-decoration: none;
+}
+.App .search-page .search-categories h1 {
+  font-size: 2.25rem;
+  padding-bottom: 1.5rem;
+}
+.App .search-page .search-categories ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.App .search-page .search-categories ul li {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+  padding: 0 0 1.5rem 0;
+  cursor: pointer;
+}
+.App .search-page .search-categories ul li span {
+  margin-left: 1rem;
+  clear: right;
+}
+.App .search-page .search-options {
+  padding: 0 0 1rem 0;
+}
+.App .search-page .search-options .search-option-btn {
+  cursor: pointer;
+  border-radius: 3px;
+  color: #00a0da;
+  border: 2px solid #00a0da;
+  float: left;
+  padding: 0.5rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.App .search-page .search-options .search-option-btn:hover {
+  background-color: #f0feff;
+}
+.App .search-page .search-options .distance {
+  margin-right: 2rem;
+}
+.App .search-page .search-body {
+  font-size: 1.5rem;
+  padding: 1rem 0;
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
