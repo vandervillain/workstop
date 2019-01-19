@@ -1,6 +1,13 @@
 import * as React from 'react';
 
-class SearchCategories extends React.Component {
+interface P {
+  update: React.FormEventHandler;
+}
+
+interface S {
+}
+
+class SearchCategories extends React.Component<P, S> {
   public render() {
     return (
       <div className="search-categories">

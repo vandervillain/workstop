@@ -43,6 +43,7 @@ html {
 .App header .login {
   float: right;
   font-size: 2rem;
+  line-height: 2rem;
 }
 .App header a {
   color: white;
