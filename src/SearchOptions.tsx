@@ -79,11 +79,9 @@ class SearchOptions extends React.Component<P, S> {
   public render() {
     return (
         <div className="search-options row">
-          <div className="col-md-6">
-            <OptionButton className="distance" text={this.distanceText()} buttonLabel="Search" options={this.getDistanceOptions()} onDone={this.updateDistance.bind(this)} />
-            <OptionButton className="location" text={this.locationText()} buttonLabel="Search" options={this.getLocationOptions()} onDone={this.updateLocation.bind(this)} />
-          </div>
-          <div className="col-md-6">
+          <div className="col-md-12">
+            <OptionButton className="distance" text={this.distanceText()} buttonLabel="Apply" options={this.getDistanceOptions()} onDone={this.updateDistance.bind(this)} />
+            <OptionButton className="location" text={this.locationText()} buttonLabel="Apply" options={this.getLocationOptions()} onDone={this.updateLocation.bind(this)} />
           </div>
         </div>
       );

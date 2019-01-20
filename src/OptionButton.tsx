@@ -21,6 +21,8 @@ interface S {
 }
 
 export class OptionButton extends React.Component<P, S> {
+  div: Node | null;
+  boundListener: any;
 
   constructor(props: P) {
     super(props);
@@ -39,6 +41,18 @@ export class OptionButton extends React.Component<P, S> {
     if (!this.state.active) {
       var newState = {...this.state};
       newState.active = true;
+
+      this.setState(newState);
+    }
+  }
+
+  close() {    
+    if (this.state.active) {
+      var newState = {...this.state};
+      newState.active = false;
+
+      document.removeEventListener('click', this.boundListener, true);
+
       this.setState(newState);
     }
   }
@@ -61,11 +75,26 @@ export class OptionButton extends React.Component<P, S> {
     if (this.props.onDone) this.props.onDone(this.state.values);
   }
 
+  isClickOutside(e: MouseEvent)
+  {
+    var clickedNode: Node = e.toElement;
+    if (this.div != null && clickedNode != this.div && !this.div.contains(clickedNode)) {
+      this.close();
+    }
+  }
+
+  public componentDidUpdate () {
+    if (this.state.active) {
+      this.boundListener = this.isClickOutside.bind(this);
+      document.addEventListener('click', this.boundListener, true);
+    }
+  }
+
   public render() {
     var self = this;
 
     return (      
-      <div className={this.props.className + " search-option-btn"} onClick={this.open.bind(this)}>
+      <div ref={(el) => { this.div = el; }} className={this.props.className + " search-option-btn"} onClick={this.open.bind(this)}>
         {this.props.text}
         {this.state.active && this.props.options.length > 0 &&
           <div className="btn-options">
