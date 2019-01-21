@@ -95,12 +95,16 @@ body, html {
                 li {
                     font-size: @large;
                     line-height: @large;
-                    padding: 0 0 @medium 0;
+                    padding: @small 0 @small 0;
                     cursor: pointer;
 
                     span {
                         margin-left: @small;
                         clear: right;
+                    }
+
+                    &:hover {
+                        background-color: @blue-accent;
                     }
                 }
             }

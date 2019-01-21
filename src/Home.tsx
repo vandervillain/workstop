@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SearchCategories from './SearchCategories';
+import {SearchCategories, ListOptionInput} from './SearchCategories';
 import SearchOptions from './SearchOptions';
 import SearchResults from './SearchResults';
 
@@ -44,6 +44,16 @@ class Home extends React.Component<P, S> {
         };
     }
 
+    getCategories() {
+        var list: ListOptionInput[] = [
+            {name: "Construction", label: "Construction"},
+            {name: "Landscaping", label: "Landscaping"},
+            {name: "Appliances", label: "Appliances"},
+            {name: "Creative", label: "Creative"}
+        ];
+        return list;
+    }
+
     changeCategories(categories: string[]) {
         var newState = {...this.state};
         newState.categories = categories;
@@ -60,7 +70,7 @@ class Home extends React.Component<P, S> {
         return (
             <div className="search-page row">
                 <div className="col-md-2">
-                    <SearchCategories update={this.changeCategories.bind(this)} />
+                    <SearchCategories update={this.changeCategories.bind(this)} categories={this.getCategories()} />
                 </div>
                 <div className="col-md-10">
                     <SearchOptions update={this.changeOptions.bind(this)} default={this.state.options} />

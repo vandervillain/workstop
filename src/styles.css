@@ -61,12 +61,15 @@ html {
 .App .search-page .search-categories ul li {
   font-size: 2.25rem;
   line-height: 2.25rem;
-  padding: 0 0 1.5rem 0;
+  padding: 1rem 0 1rem 0;
   cursor: pointer;
 }
 .App .search-page .search-categories ul li span {
   margin-left: 1rem;
   clear: right;
+}
+.App .search-page .search-categories ul li:hover {
+  background-color: #f0feff;
 }
 .App .search-page .search-options {
   padding: 0 0 1rem 0;

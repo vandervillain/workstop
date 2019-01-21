@@ -1,26 +1,54 @@
 import * as React from 'react';
 
+export interface ListOptionInput {
+  name: string;
+  label: string;
+}
+
 interface P {
-  update: React.FormEventHandler;
+  update: (state: S) => void;
+  categories: ListOptionInput[];
 }
 
 interface S {
+  values: string[];
 }
 
-class SearchCategories extends React.Component<P, S> {
+export class SearchCategories extends React.Component<P, S> {
+  
+  constructor(props: P) {
+    super(props);
+    this.state = {
+      values: []
+    };
+  }
+
+  onClick(e: MouseEvent) {
+    var el = e.currentTarget as HTMLElement,
+        name = el.getAttribute('data-name') as string,
+        newState = {...this.state},
+        i = newState.values.indexOf(name);
+
+    if (i !== -1){
+      newState.values.splice(i, 1);
+    }
+    else newState.values.push(name);
+
+    this.setState(newState);
+    this.props.update(newState);
+  }
+
   public render() {
+    var self = this;
     return (
       <div className="search-categories">
       <h1>Find work</h1>
         <ul>
-          <li><span className="checkbox empty" /><span>Construction</span></li>
-          <li><span className="checkbox empty" /><span>Landscaping</span></li>
-          <li><span className="checkbox empty" /><span>Appliances</span></li>
-          <li><span className="checkbox empty" /><span>Creative</span></li>
+          {this.props.categories.map(function(c) {
+            return <li key={c.name} data-name={c.name} onClick={self.onClick.bind(self)}><span className={self.state.values.indexOf(c.name) !== -1 ? "checkbox" : "checkbox empty"} /><span>{c.label}</span></li>
+          })}
         </ul>
       </div>
     );
   }
 }
-
-export default SearchCategories;
