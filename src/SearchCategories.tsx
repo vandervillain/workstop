@@ -6,7 +6,7 @@ export interface ListOptionInput {
 }
 
 interface P {
-  update: (state: S) => void;
+  update: (categories: string[]) => void;
   categories: ListOptionInput[];
 }
 
@@ -35,7 +35,7 @@ export class SearchCategories extends React.Component<P, S> {
     else newState.values.push(name);
 
     this.setState(newState);
-    this.props.update(newState);
+    this.props.update(newState.values);
   }
 
   public render() {
