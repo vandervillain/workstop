@@ -1,28 +1,31 @@
 import * as React from 'react';
 import {OptionButton, OptionButtonInput} from './OptionButton';
 
-interface P {
-  update: (state: S) => void;
-
-  default: {
-    distance: number;
-    location: {city: string, state:string};
-  }
-}
-
-interface S {
+export interface SearchOptionsValue
+{
   distance: number;
   location: {city: string, state:string};
 }
 
-class SearchOptions extends React.Component<P, S> {
+interface P {
+  update: (value: SearchOptionsValue) => void;
+  value: SearchOptionsValue;
+}
+
+interface S {
+  value: SearchOptionsValue;
+}
+
+export class SearchOptions extends React.Component<P, S> {
 
   constructor(props: P) {
     super(props);
 
     this.state = {
-      distance: this.props.default.distance,
-      location: this.props.default.location
+      value: {
+        distance: this.props.value.distance,
+        location: this.props.value.location
+      }
     }
   }
 
@@ -57,35 +60,33 @@ class SearchOptions extends React.Component<P, S> {
   updateDistance(values: { [k: string]: any })
   {
     var newState: S = { ...this.state };
-    newState.distance = values['distance'];
+    newState.value.distance = values['distance'];
     
     this.setState(newState);
-    this.props.update(newState);
+    this.props.update(newState.value);
   }
 
   updateLocation(values: { [k: string]: any })
   {
     var newState: S = { ...this.state };
-    newState.location.city = values['city'];
-    newState.location.state = values['state'];
+    newState.value.location.city = values['city'];
+    newState.value.location.state = values['state'];
 
     this.setState(newState);
-    this.props.update(newState);
+    this.props.update(newState.value);
   }
 
-  distanceText = () => "within " +  this.state.distance + " miles";
-  locationText = () => this.state.location.city + ", " + this.state.location.state;
+  distanceText = () => "within " +  this.state.value.distance + " miles";
+  locationText = () => this.state.value.location.city + ", " + this.state.value.location.state;
 
   public render() {
     return (
         <div className="search-options row">
           <div className="col-md-12">
-            <OptionButton className="distance" text={this.distanceText()} buttonLabel="Apply" options={this.getDistanceOptions()} onDone={this.updateDistance.bind(this)} />
-            <OptionButton className="location" text={this.locationText()} buttonLabel="Apply" options={this.getLocationOptions()} onDone={this.updateLocation.bind(this)} />
+            <OptionButton className="distance" text={this.distanceText()} buttonLabel="Apply" options={this.getDistanceOptions()} onDone={(v) => this.updateDistance(v)} />
+            <OptionButton className="location" text={this.locationText()} buttonLabel="Apply" options={this.getLocationOptions()} onDone={(v) => this.updateLocation(v)} />
           </div>
         </div>
       );
   }
 }
-
-export default SearchOptions;

@@ -94,15 +94,15 @@ export class OptionButton extends React.Component<P, S> {
     var self = this;
 
     return (      
-      <div ref={(el) => { this.div = el; }} className={this.props.className + " search-option-btn"} onClick={this.open.bind(this)}>
+      <div ref={(el) => { this.div = el; }} className={this.props.className + " search-option-btn"} onClick={(e) => this.open(e)}>
         {this.props.text}
         {this.state.active && this.props.options.length > 0 &&
           <div className="btn-options">
             {this.props.options.map(function(o) {
-              return <span key={o.name}>{o.label} <input type={o.type} name={o.name} onChange={self.updateItemValue.bind(self)} value={self.state.values[o.name]} /></span>
+              return <span key={o.name}>{o.label} <input type={o.type} name={o.name} onChange={(e) => self.updateItemValue(e)} value={self.state.values[o.name]} /></span>
             })
             }
-            <button onClick={this.done.bind(this)}>{this.props.buttonLabel}</button>
+            <button onClick={(e) => this.done(e)}>{this.props.buttonLabel}</button>
           </div>
         }
       </div>

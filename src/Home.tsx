@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SearchCategories, ListOptionInput} from './SearchCategories';
-import SearchOptions from './SearchOptions';
+import {SearchOptions, SearchOptionsValue} from './SearchOptions';
 import SearchResults from './SearchResults';
 
 export interface Work {
@@ -11,20 +11,12 @@ export interface Work {
     DateCreated: Date;
 }
 
-interface SearchOptionsData {
-    distance: number,
-    location: {
-        city: string,
-        state: string
-    }
-}
-
 interface P {
 }
 
 interface S {
     categories: string[],
-    options: SearchOptionsData,
+    options: SearchOptionsValue,
     results: Array<Work>;
 }
 
@@ -62,7 +54,7 @@ class Home extends React.Component<P, S> {
         this.search(newState);
     }
 
-    changeOptions(options: SearchOptionsData) {
+    changeOptions(options: SearchOptionsValue) {
         var newState = {...this.state};
         newState.options = options;
         this.search(newState);
@@ -122,10 +114,10 @@ class Home extends React.Component<P, S> {
         return (
             <div className="search-page row">
                 <div className="col-md-2">
-                    <SearchCategories update={this.changeCategories.bind(this)} categories={this.getCategories()} />
+                    <SearchCategories update={(c) => this.changeCategories(c)} categories={this.getCategories()} />
                 </div>
                 <div className="col-md-10">
-                    <SearchOptions update={this.changeOptions.bind(this)} default={this.state.options} />
+                    <SearchOptions update={(o) => this.changeOptions(o)} value={this.state.options} />
                     <SearchResults results={this.state.results} />
                 </div>
             </div>

@@ -11,7 +11,7 @@ interface P {
 }
 
 interface S {
-  values: string[];
+  value: string[];
 }
 
 export class SearchCategories extends React.Component<P, S> {
@@ -19,23 +19,27 @@ export class SearchCategories extends React.Component<P, S> {
   constructor(props: P) {
     super(props);
     this.state = {
-      values: []
+      value: []
     };
   }
 
-  onClick(e: MouseEvent) {
+  onClick(e: React.MouseEvent) {
     var el = e.currentTarget as HTMLElement,
         name = el.getAttribute('data-name') as string,
         newState = {...this.state},
-        i = newState.values.indexOf(name);
+        i = newState.value.indexOf(name);
 
     if (i !== -1){
-      newState.values.splice(i, 1);
+      newState.value.splice(i, 1);
     }
-    else newState.values.push(name);
+    else newState.value.push(name);
 
     this.setState(newState);
-    this.props.update(newState.values);
+    this.props.update(newState.value);
+  }
+
+  getClassName(name: string) {
+    return this.state.value.indexOf(name) !== -1 ? "checkbox" : "checkbox empty"
   }
 
   public render() {
@@ -44,9 +48,9 @@ export class SearchCategories extends React.Component<P, S> {
       <div className="search-categories">
       <h1>Find work</h1>
         <ul>
-          {this.props.categories.map(function(c) {
-            return <li key={c.name} data-name={c.name} onClick={self.onClick.bind(self)}><span className={self.state.values.indexOf(c.name) !== -1 ? "checkbox" : "checkbox empty"} /><span>{c.label}</span></li>
-          })}
+          {this.props.categories.map(c => 
+            <li key={c.name} data-name={c.name} onClick={(e) => self.onClick(e)}><span className={self.getClassName(c.name) } /><span>{c.label}</span></li>
+          )}
         </ul>
       </div>
     );
