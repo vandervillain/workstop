@@ -74,17 +74,48 @@ html {
 .App .search-page .search-options {
   padding: 0 0 1rem 0;
 }
-.App .search-page .search-options .search-option-btn {
-  cursor: pointer;
-  border-radius: 3px;
-  color: #00a0da;
-  border: 2px solid #00a0da;
+.App .search-page .search-options .option-btn {
+  position: relative;
   float: left;
-  padding: 0.5rem 2rem;
   font-size: 1.5rem;
   font-weight: 600;
+  color: #00a0da;
 }
-.App .search-page .search-options .search-option-btn:hover {
+.App .search-page .search-options .option-btn .label-btn {
+  cursor: pointer;
+  padding: 0.5rem 2rem;
+  border-radius: 3px;
+  border: 2px solid #00a0da;
+}
+.App .search-page .search-options .option-btn .label-btn:hover {
+  background-color: #f0feff;
+}
+.App .search-page .search-options .option-btn .btn-options {
+  position: absolute;
+  padding: 1rem 1.5rem;
+  margin-top: 0.5rem;
+  background-color: white;
+  border: 1px solid #00a0da;
+}
+.App .search-page .search-options .option-btn .btn-options > div {
+  margin-top: 1rem;
+}
+.App .search-page .search-options .option-btn .btn-options > div span {
+  display: block;
+}
+.App .search-page .search-options .option-btn .btn-options > div:first-child {
+  margin-top: 0;
+}
+.App .search-page .search-options .option-btn .btn-options button {
+  cursor: pointer;
+  background-color: #00a0da;
+  color: white;
+  border: none;
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  float: right;
+}
+.App .search-page .search-options .option-btn.active .label-btn {
   background-color: #f0feff;
 }
 .App .search-page .search-options .distance {

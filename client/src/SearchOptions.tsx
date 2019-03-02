@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {OptionButton, OptionButtonInput} from './OptionButton';
+import {OptionButton, OptionButtonInput} from './components/OptionButton';
 
 export interface SearchOptionsValue
 {
@@ -8,7 +8,7 @@ export interface SearchOptionsValue
 }
 
 interface P {
-  update: (value: SearchOptionsValue) => void;
+  onUpdate: (value: SearchOptionsValue) => void;
   value: SearchOptionsValue;
 }
 
@@ -17,6 +17,7 @@ interface S {
 }
 
 export class SearchOptions extends React.Component<P, S> {
+  distanceMapping = [ 5, 10, 30, 50, 100, 200, 300 ];
 
   constructor(props: P) {
     super(props);
@@ -29,55 +30,57 @@ export class SearchOptions extends React.Component<P, S> {
     }
   }
 
-  getDistanceOptions() {
+  getDistanceOptions(): OptionButtonInput[] {
     var rtn: OptionButtonInput[] = [];
     rtn.push({
       name: "distance",
       label: "Distance",
-      type: "number",
-      value: 30
+      type: "range",
+      min: 0,
+      max: 6,
+      map: this.distanceMapping,
+      default: this.state.value.distance != null ? this.distanceMapping.indexOf(this.state.value.distance) : 2
     });
     return rtn;
   }
 
-  getLocationOptions() {
+  getLocationOptions(): OptionButtonInput[] {
     var rtn: OptionButtonInput[] = [];
     rtn.push({
       name: "city",
       label: "City",
       type: "string",
-      value: "Suquamish"
+      default: this.state.value.location.city
     });
     rtn.push({
       name: "state",
       label: "State",
       type: "string",
-      value: "WA"
+      default: this.state.value.location.state
     });
     return rtn;
   }
 
-  updateDistance(values: { [k: string]: any })
-  {
+  updateDistance(values: { [k: string]: any }): void { 
     var newState: S = { ...this.state };
-    newState.value.distance = values['distance'];
+
+    newState.value.distance = this.distanceMapping[values['distance']];
     
     this.setState(newState);
-    this.props.update(newState.value);
+    this.props.onUpdate(newState.value);
   }
 
-  updateLocation(values: { [k: string]: any })
-  {
+  updateLocation(values: { [k: string]: any }): void {
     var newState: S = { ...this.state };
     newState.value.location.city = values['city'];
     newState.value.location.state = values['state'];
 
     this.setState(newState);
-    this.props.update(newState.value);
+    this.props.onUpdate(newState.value);
   }
 
-  distanceText = () => "within " +  this.state.value.distance + " miles";
-  locationText = () => this.state.value.location.city + ", " + this.state.value.location.state;
+  distanceText = (): string => "within " +  this.state.value.distance + " miles";
+  locationText = (): string => this.state.value.location.city + ", " + this.state.value.location.state;
 
   public render() {
     return (

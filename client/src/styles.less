@@ -113,18 +113,58 @@ body, html {
         .search-options {
             padding: 0 0 @small 0;
 
-            .search-option-btn {
-                cursor: pointer;
-                border-radius: 3px;
-                color: @blue-shade2;
-                border: 2px solid @blue-shade2;
+            .option-btn {
+                position: relative;
                 float: left;
-                padding: @tiny @larger;
                 font-size: @medium;
                 font-weight: 600;
+                color: @blue-shade2;
 
-                &:hover {
-                    background-color: @blue-accent;
+                .label-btn {
+                    cursor: pointer;
+                    padding: @tiny @larger;
+                    border-radius: 3px;
+                    border: 2px solid @blue-shade2;
+                    
+                    &:hover {
+                        background-color: @blue-accent;
+                    }
+                }
+
+                .btn-options {
+                    position: absolute;
+                    padding: @small @medium;
+                    margin-top: @tiny;
+                    background-color: white;
+                    border: 1px solid @blue-shade2;
+
+                    > div {
+                        margin-top: @small;
+
+                        span {
+                            display: block;
+                        }
+                    }
+
+                    > div:first-child {
+                        margin-top: 0;
+                    }
+
+                    button {
+                        cursor: pointer;
+                        background-color: @blue-shade2;
+                        color: white;
+                        border: none;
+                        margin-top: @small;
+                        padding: @tiny @medium;
+                        float: right;
+                    }
+                }
+
+                &.active {
+                    .label-btn {
+                        background-color: @blue-accent;
+                    }
                 }
             }
 

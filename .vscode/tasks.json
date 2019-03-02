@@ -4,6 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "start server",
+            "type": "shell",
+            "command": "node server/index.js",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
             "label": "Less Compile",
             "type": "shell",
             "command": "lessc src/styles.less src/styles.css",
