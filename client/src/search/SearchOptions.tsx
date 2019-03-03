@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {OptionButton, OptionButtonInput} from './components/OptionButton';
+import {OptionButton, OptionButtonInput} from '../components/OptionButton';
 
 export interface SearchOptionsValue
 {

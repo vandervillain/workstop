@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Work } from './Home'
+import { Work } from './Search'
 
 interface P {
   value: Array<Work>;

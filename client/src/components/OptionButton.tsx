@@ -8,7 +8,7 @@ export interface OptionButtonInput {
   type: string;
   min?: number;
   max?: number;
-  map?: {};
+  map?: number[];
   default?: any;
   value?: any;
 }

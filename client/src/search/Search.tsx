@@ -2,6 +2,7 @@ import * as React from 'react';
 import {SearchCategories, ListOptionInput} from './SearchCategories';
 import {SearchOptions, SearchOptionsValue} from './SearchOptions';
 import SearchResults from './SearchResults';
+import { QuerySettings } from '../../../server/logic/workLogic';
 
 export interface Work {
     Title: string;
@@ -20,7 +21,7 @@ interface S {
     results: Array<Work>;
 }
 
-class Home extends React.Component<P, S> {
+class Search extends React.Component<P, S> {
 
     constructor(props: any) {
         super(props);
@@ -46,31 +47,36 @@ class Home extends React.Component<P, S> {
         });
     }
 
-    toggleCategory(name: string): void {
-        var newState = {...this.state},
-            i = newState.categories.indexOf(name);
-
-        if (i !== -1) newState.categories.splice(i, 1);
-        else newState.categories.push(name);
-
+    updateCategories(selected: string[]): void {
+        var newState = {...this.state};
+        newState.categories = selected;
         this.search(newState);
     }
 
-    changeOptions(options: SearchOptionsValue): void {
+    updateLocation(options: SearchOptionsValue): void {
         var newState = {...this.state};
         newState.options = options;
         this.search(newState);
     }
 
     search(state: S): void {
-        fetch('/work')
+        var qs: QuerySettings = {
+            categories: this.state.categories,
+            distance: this.state.options.distance,
+            location: this.state.options.location
+        };
+
+        fetch('/work', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(qs)
+        })
         .then(res => res.json())
         .then((response: Work[]) => {
-            console.log(response);
-
             var newState = {...state};
-            newState.results = response.filter(r => newState.categories.length === 0 || newState.categories.indexOf(r.Category) !== -1);
-            newState.results = newState.results.filter(r => r.Distance <= newState.options.distance);
+            newState.results = response;
             this.setState(newState);
         })
     }
@@ -83,10 +89,10 @@ class Home extends React.Component<P, S> {
         return (
             <div className="search-page row">
                 <div className="col-md-2">
-                    <SearchCategories onUpdate={(name) => this.toggleCategory(name)} query={this.getCategories} value={this.state.categories} />
+                    <SearchCategories onUpdate={(selected) => this.updateCategories(selected)} query={this.getCategories} default={this.state.categories} />
                 </div>
                 <div className="col-md-10">
-                    <SearchOptions onUpdate={(o) => this.changeOptions(o)} value={this.state.options} />
+                    <SearchOptions onUpdate={(o) => this.updateLocation(o)} value={this.state.options} />
                     <SearchResults value={this.state.results} />
                 </div>
             </div>
@@ -94,4 +100,4 @@ class Home extends React.Component<P, S> {
     }
 }
 
-export default Home;
+export default Search;

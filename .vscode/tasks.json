@@ -13,7 +13,7 @@
         {
             "label": "Less Compile",
             "type": "shell",
-            "command": "lessc src/styles.less src/styles.css",
+            "command": "lessc client/src/styles.less client/src/styles.css",
             "group": "build"
         }
     ]
