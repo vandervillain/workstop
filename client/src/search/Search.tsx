@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { get, post } from '../utils/request';
 import {SearchCategories, ListOptionInput} from './SearchCategories';
 import {SearchOptions, SearchOptionsValue} from './SearchOptions';
 import SearchResults from './SearchResults';
@@ -39,8 +40,7 @@ class Search extends React.Component<P, S> {
     }
 
     getCategories(callback: (list: ListOptionInput[]) => void) {
-        fetch('/categories')
-        .then(res => res.json())
+        get('/api/categories')
         .then((response: ListOptionInput[]) => {
             console.log(response);
             callback(response);
@@ -66,14 +66,7 @@ class Search extends React.Component<P, S> {
             location: this.state.options.location
         };
 
-        fetch('/work', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(qs)
-        })
-        .then(res => res.json())
+        post('/api/work', qs)
         .then((response: Work[]) => {
             var newState = {...state};
             newState.results = response;

@@ -24,4 +24,6 @@ yarn-error.log*
 */**/build
 package-lock.json
 
+**/.vscode
+**/*.css
 server/**/*.js

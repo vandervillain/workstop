@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.2.1",
+    "lodash": "^4.17.14",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1",
@@ -15,9 +16,18 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3001",
+      "pathRewrite": {
+        "^/api": ""
+      },
+      "changeOrigin": true
+    }
+  },
   "devDependencies": {
     "@types/jest": "^23.3.12",
+    "@types/lodash": "^4.14.136",
     "@types/node": "^10.12.18",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
