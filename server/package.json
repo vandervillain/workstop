@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,27 +12,32 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.17.1",
-    "express-session": "^1.16.2",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.4",
     "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "uid-safe": "^2.1.5",
     "url": "^0.11.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
-    "@types/express-session": "^1.15.13",
     "@types/jsonwebtoken": "^8.3.2",
+    "@types/mongoose": "^5.5.8",
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.12.21",
+    "@types/node-fetch": "^2.3.7",
     "@types/passport": "^1.0.0",
     "@types/passport-facebook": "^2.1.9",
     "@types/passport-jwt": "^3.0.1",
-    "@types/passport-local": "^1.0.33",
-    "@types/uid-safe": "^2.1.2"
+    "@types/passport-local": "^1.0.33"
+  },
+  "nodemonConfig": {
+    "watch": [],
+    "ext": "js",
+    "exec": "node index.js"
   }
 }

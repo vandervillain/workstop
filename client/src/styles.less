@@ -2,7 +2,7 @@
 @blue-shade1: #00deff;
 @blue-shade2: #00a0da;
 @blue-accent: #f0feff;
-
+@yellow: #ffe;
 @tiny: .5rem;
 @small: 1rem;
 @medium: 1.5rem;
@@ -21,6 +21,7 @@ body, html {
     max-width: 1600px;
     margin-right: auto;
     margin-left: auto;
+    font-size: @medium;
 }
 
 .clear {
@@ -31,9 +32,41 @@ body, html {
     }
 }
 
+span.plus {
+    display: block;
+    float: left;
+    clear: right;
+    width: @large;
+    height: @large;
+    background-image: url('./glyphicons/glyphicons-basic-371-plus.svg');
+}
+
+.back {
+    font-size: @large;
+    line-height: @large;
+    cursor: pointer;
+
+    span {
+        display: block;
+        float: left;
+        clear: right;
+
+        &.arrow {
+            width: @large;
+            height: @large;
+            background-image: url('./glyphicons/glyphicons-basic-885-step-back.svg');
+        }
+
+        &.label {
+            font-size: @large;
+        }
+    }
+}
+
 .checkbox {
     display: block;
     float: left;
+    clear: right;
     width: @large;
     height: @large;
     background-image: url('./glyphicons/glyphicons-basic-153-square-checkbox.svg');
@@ -51,7 +84,26 @@ body, html {
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
-  }
+}
+ 
+.autocomplete {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    border-radius: 3px;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.autocomplete-items {
+    > div {
+        cursor: pointer;
+
+        &:hover, &.active {
+            background-color: @blue-accent;
+        }
+    }
+}
 
 .range-input {
     padding-right: 5px;
@@ -160,6 +212,52 @@ body, html {
     }
 }
 
+.link-btn {
+    cursor: pointer;
+    background-color: @blue-shade2;
+    color: white;
+    border: 2px solid @blue-shade2;
+    margin: 0;
+    padding: @tiny @medium;
+    float: right;
+    font-weight: 600;
+    font-size: @medium;
+
+    .plus {
+        filter: invert(99%) sepia(5%) saturate(0%) hue-rotate(287deg) brightness(113%) contrast(100%);
+        margin-left: -10px;
+        padding-right: 10px;
+    }
+
+    &:hover {
+        background-color: @blue-accent;
+        color: @blue-shade2;
+
+        .plus {
+            filter: invert(48%) sepia(87%) saturate(3375%) hue-rotate(167deg) brightness(98%) contrast(101%);
+        }
+    }
+}
+
+form {
+    .field {
+        display: block;
+        margin-bottom: @medium;
+
+        .label {
+            display: block;
+        }
+    }
+
+    input[type=submit] {
+        cursor: pointer;
+        background-color: @blue-shade2;
+        color: white;
+        border: none;
+        margin: 0;
+        padding: @tiny @medium;
+    }
+}
 .App {
   
 //   .App-logo {
@@ -167,7 +265,7 @@ body, html {
 //     height: 80px;
 //   }
   
-  header {
+    header {
     //background-color: #00d0ff;
     background: linear-gradient(90deg, @blue, @blue-shade1 50%, @blue-shade2);
     background: webkit-linear-gradient(90deg, @blue, @blue-shade1 50%, @blue-shade2);
@@ -303,9 +401,28 @@ body, html {
         .search-body {
             font-size: @medium;
             padding: @small 0;
+
+            .search-result {
+                cursor: pointer;
+                padding-bottom: @small;
+                
+                p, h2 {
+                    margin-bottom: 0;
+                }
+
+                &:hover {
+                    background-color: @yellow;
+                }
+            }
         }
     }
-  
+
+    .post-page {
+        input, textarea {
+            width: 100%;
+        }
+    }
+
     @keyframes App-logo-spin {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }

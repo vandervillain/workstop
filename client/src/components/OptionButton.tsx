@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Input } from './Input';
 import { RangeInput } from './RangeInput';
+import { Autocomplete } from './Autocomplete';
 
 export interface OptionButtonInput {
   name: string;
@@ -9,7 +10,7 @@ export interface OptionButtonInput {
   min?: number;
   max?: number;
   map?: number[];
-  default?: any;
+  options?: { key: string, value:string }[];
   value?: any;
 }
 
@@ -40,7 +41,7 @@ export class OptionButton extends React.Component<P, S> {
     };
 
     // set default values for inputs in state
-    this.props.options.forEach((o) => this.state.values[o.name] = o.default );
+    this.props.options.forEach((o) => this.state.values[o.name] = o.value );
   }
 
   toggleOptions() {
@@ -71,12 +72,36 @@ export class OptionButton extends React.Component<P, S> {
     }
   }
 
-  apply(name?: string, value?: any)
-  {
+  apply(el: HTMLElement) {
     var newState = {...this.state};
     newState.active = false;
 
-    if (name !== undefined && value !== undefined)
+    // gather through all input values
+    var values: { name: string, value: string}[] = [];
+    this.pullValuesRecursive(el, values);
+    for (var v in values) newState.values[values[v].name] = values[v].value;
+
+    this.setState(newState);
+
+    // need to send this option button's input values to parent
+    this.props.onDone(newState.values);
+  }
+
+  pullValuesRecursive(el: HTMLElement, values: { name: string, value: string }[]) {
+    for (var c = 0; c < el.children.length; c++) {
+      var input = el.children[c] as HTMLInputElement;
+      if (input && input.name && input.value !== undefined) {
+        values.push({ name: input.name, value: input.value });
+      }
+      else if (el.children[c].children.length > 0) this.pullValuesRecursive(el.children[c] as HTMLElement, values);
+    }
+  }
+
+  setValue(name?: string, value?: any) {
+    var newState = {...this.state};
+    newState.active = false;
+
+    if (name && value !== undefined)
     {
       newState.values[name] = value;
     }
@@ -87,14 +112,7 @@ export class OptionButton extends React.Component<P, S> {
     this.props.onDone(newState.values);
   }
 
-  updateInput(name: string, value: any) {
-    var newState = {...this.state};
-    newState.values[name] = value;
-    this.setState(newState);
-  }
-
-  isClickOutside(e: MouseEvent)
-  {
+  isClickOutside(e: MouseEvent) {
     var clickedNode: Node = e.toElement;
     if (clickedNode != this.div && !this.div.contains(clickedNode)) {
       this.close();
@@ -103,14 +121,17 @@ export class OptionButton extends React.Component<P, S> {
 
   getClassName = () => this.props.className + " option-btn" + (this.state.active ? " active" : "");
 
-  renderOption(o: OptionButtonInput)
-  {
+  renderOption(o: OptionButtonInput) {
     var self = this;
     if (o.type == "range")
     {
-      return <RangeInput key={o.name} value={o} onUpdate={(n, v) => self.updateInput(n, v)} onDone={(n, v) => self.apply(n, v)} />
+      return <RangeInput key={o.name} value={o} onDone={(n, v) => self.setValue(n, v)} />
     }
-    else return <Input key={o.name} value={o} onUpdate={(n, v) => self.updateInput(n, v)} onDone={(n, v) => self.apply(n, v)} />
+    else if (o.type == "autocomplete")
+    {
+      return <Autocomplete key={o.name} options={o.options} name={o.name} defaultValue={o.value} onDone={(n, v) => self.setValue(n, v)} />
+    }
+    else return <Input key={o.name} value={o} onDone={(n, v) => self.setValue(n, v)} />
   }
 
   public render() {
@@ -125,7 +146,7 @@ export class OptionButton extends React.Component<P, S> {
               return self.renderOption(o)
             })
             }
-            <button onClick={() => this.apply()}>{this.props.buttonLabel}</button>
+            <button onClick={(e) => this.apply((e.target as HTMLElement).parentElement as HTMLElement)}>{this.props.buttonLabel}</button>
           </div>
         }
       </div>

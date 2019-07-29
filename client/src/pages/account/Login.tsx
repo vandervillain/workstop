@@ -1,8 +1,8 @@
 
 import * as React from 'react';
 import { withRouter } from "react-router-dom";
-import auth from '../utils/auth';
-import { post } from '../utils/request';
+import auth from '../../utils/auth';
+import { post } from '../../utils/request';
 
 interface P {
     match; 

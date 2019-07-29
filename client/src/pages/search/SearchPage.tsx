@@ -1,17 +1,10 @@
 import * as React from 'react';
-import { get, post } from '../utils/request';
-import {SearchCategories, ListOptionInput} from './SearchCategories';
-import {SearchOptions, SearchOptionsValue} from './SearchOptions';
+import { get, post } from '../../utils/request';
+import { SearchCategories, ListOptionInput } from './SearchCategories';
+import { SearchOptions, SearchOptionsValue } from './SearchOptions';
 import SearchResults from './SearchResults';
-import { QuerySettings } from '../../../server/logic/workLogic';
-
-export interface Work {
-    Title: string;
-    Description: string;
-    Category: string;
-    Distance: number,
-    DateCreated: Date;
-}
+import { PostModel, CategoryModel } from '../../models/data'
+import { Link } from 'react-router-dom';
 
 interface P {
 }
@@ -19,10 +12,10 @@ interface P {
 interface S {
     categories: string[],
     options: SearchOptionsValue,
-    results: Array<Work>;
+    results: Array<PostModel>;
 }
 
-class Search extends React.Component<P, S> {
+class SearchPage extends React.Component<P, S> {
 
     constructor(props: any) {
         super(props);
@@ -41,9 +34,15 @@ class Search extends React.Component<P, S> {
 
     getCategories(callback: (list: ListOptionInput[]) => void) {
         get('/api/categories')
-        .then((response: ListOptionInput[]) => {
-            console.log(response);
-            callback(response);
+        .then((response: CategoryModel[]) => {
+            var list: ListOptionInput[] = [];
+            response.forEach(c => {
+                list.push({
+                    name: c._id,
+                    label: c.title
+                });
+            });
+            callback(list);
         });
     }
 
@@ -59,19 +58,20 @@ class Search extends React.Component<P, S> {
         this.search(newState);
     }
 
-    search(state: S): void {
-        var qs: QuerySettings = {
-            categories: this.state.categories,
-            distance: this.state.options.distance,
-            location: this.state.options.location
-        };
+    search(newState: S): void {
+        navigator.geolocation.getCurrentPosition((p) => {
+            var qs = {
+                categories: newState.categories,
+                distance: newState.options.distance,
+                location: newState.options.location,
+                coords: { lat: p.coords.latitude, long: p.coords.longitude }
+            };
 
-        post('/api/work', qs)
-        .then((response: Work[]) => {
-            var newState = {...state};
-            newState.results = response;
-            this.setState(newState);
-        })
+            post('/api/posts', qs).then((response: PostModel[]) => {
+                newState.results = response;
+                this.setState(newState);
+            });
+        });
     }
 
     componentDidMount(): void {
@@ -84,13 +84,16 @@ class Search extends React.Component<P, S> {
                 <div className="col-md-2">
                     <SearchCategories onUpdate={(selected) => this.updateCategories(selected)} query={this.getCategories} default={this.state.categories} />
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-8">
                     <SearchOptions onUpdate={(o) => this.updateLocation(o)} value={this.state.options} />
                     <SearchResults value={this.state.results} />
+                </div>
+                <div className="col-md-2">
+                    <Link to="/post"><button className="create-post link-btn"><span className="plus"></span>Create Post</button></Link>
                 </div>
             </div>
         );
     }
 }
 
-export default Search;
+export default SearchPage;

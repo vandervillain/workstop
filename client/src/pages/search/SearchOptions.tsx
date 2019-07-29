@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {OptionButton, OptionButtonInput} from '../components/OptionButton';
+import { CityArray } from '../../utils/arrays';
+import {OptionButton, OptionButtonInput} from '../../components/OptionButton';
 
 export interface SearchOptionsValue
 {
@@ -39,8 +40,19 @@ export class SearchOptions extends React.Component<P, S> {
       min: 0,
       max: 6,
       map: this.distanceMapping,
-      default: this.state.value.distance != null ? this.distanceMapping.indexOf(this.state.value.distance) : 2
+      value: this.state.value.distance != null ? this.distanceMapping.indexOf(this.state.value.distance) : 2
     });
+    return rtn;
+  }
+
+  getCities() {
+    var rtn: {key: string; value: string}[] = [];
+    for (var c in CityArray) {
+      rtn.push({
+        key: c, 
+        value: CityArray[c]
+      });
+    }
     return rtn;
   }
 
@@ -49,15 +61,16 @@ export class SearchOptions extends React.Component<P, S> {
     rtn.push({
       name: "city",
       label: "City",
-      type: "string",
-      default: this.state.value.location.city
+      type: "autocomplete",
+      options: this.getCities(),
+      value: this.state.value.location.city
     });
-    rtn.push({
-      name: "state",
-      label: "State",
-      type: "string",
-      default: this.state.value.location.state
-    });
+    // rtn.push({
+    //   name: "state",
+    //   label: "State",
+    //   type: "string",
+    //   default: this.state.value.location.state
+    // });
     return rtn;
   }
 
@@ -73,7 +86,7 @@ export class SearchOptions extends React.Component<P, S> {
   updateLocation(values: { [k: string]: any }): void {
     var newState: S = { ...this.state };
     newState.value.location.city = values['city'];
-    newState.value.location.state = values['state'];
+    newState.value.location.state = 'WA';//values['state'];
 
     this.setState(newState);
     this.props.onUpdate(newState.value);

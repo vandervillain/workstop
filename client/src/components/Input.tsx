@@ -3,43 +3,29 @@ import { OptionButtonInput } from './OptionButton';
 
 export interface P {
   value: OptionButtonInput;
-  onUpdate: (name: string, value: any) => void;
   onDone: (name: string, value: any) => void;
 }
 
-interface S {
-  value: any;
-}
+interface S {}
 
 export class Input extends React.Component<P, S> {
+  inputRef;
 
   constructor(props: P) {
     super(props);
 
-    this.state = {
-      value: props.value.default
-    };
+    this.inputRef = React.createRef();
   }
 
-  updateItemValue(e: React.ChangeEvent<HTMLInputElement>)
-  {
-    var val = e.currentTarget.value;
-    this.setState({value: val});
-    this.props.onUpdate(this.props.value.name, val);
-  }
-
-  ifEnterClose(e: React.KeyboardEvent<HTMLInputElement>)
-  {
+  ifEnterClose(e: React.KeyboardEvent<HTMLInputElement>) {
     if (this.props.onDone && (e.which == 13 || e.keyCode == 13)) {
-      this.props.onDone(this.props.value.name, this.state.value);
+      this.props.onDone(this.inputRef.current.name, this.inputRef.current.value);
     }
   }
 
   public render() {
-    var self = this;
-
     return (      
-      <div><span className="input-label">{this.props.value.label}</span><input type={this.props.value.type} min={this.props.value.min} max={this.props.value.max} name={this.props.value.name} onChange={(e) => self.updateItemValue(e)} onKeyDown={(e) => self.ifEnterClose(e)} value={self.state.value} /></div>
+      <div><span className="input-label">{this.props.value.label}</span><input ref={this.inputRef} type={this.props.value.type} min={this.props.value.min} max={this.props.value.max} name={this.props.value.name} onKeyDown={(e) => this.ifEnterClose(e)} defaultValue={this.props.value.value} /></div>
     );
   }
 }
