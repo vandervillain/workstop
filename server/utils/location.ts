@@ -47,7 +47,22 @@ interface Address {
 }
 
 function getUrl(state, zip, city, address, numResults) {
-    return `http://dev.virtualearth.net/REST/v1/Locations/US/${state}/${zip}/${city}/${address}?maxResults=${numResults}&key=${bingKey}`;
+    var url = "http://dev.virtualearth.net/REST/v1/Locations?countryRegion=US";
+    var params = {
+        adminDistrict: state,
+        locality: city,
+        postalCode: zip,
+        addressLine: address,
+        maxResults: numResults,
+        key: bingKey
+    };
+    
+    for (var p in params) {
+        if (params[p]) url += `&${p}=${params[p]}`;
+    }
+
+    return url;
+    //return `http://dev.virtualearth.net/REST/v1/Locations/US/${state}/${zip}/${city}/${address}?maxResults=${numResults}&key=${bingKey}`;
 }
 
 async function getGpsCoords(zip, city, address) {
@@ -61,12 +76,16 @@ async function getGpsCoords(zip, city, address) {
         }
     });
     var response: LocationResponse = await rawResponse.json();
+    //console.log(JSON.stringify(response, null, 4));
     if (response) {
         if (response.statusCode && response.statusCode === 200) {
             if (response.resourceSets && response.resourceSets.length > 0) {
                 if (response.resourceSets[0].resources && response.resourceSets[0].resources[0]) {
                     if (response.resourceSets[0].resources[0].point && response.resourceSets[0].resources[0].point.coordinates) {
-                        return response.resourceSets[0].resources[0].point.coordinates;
+                        return {
+                            lat: response.resourceSets[0].resources[0].point.coordinates[0],
+                            long: response.resourceSets[0].resources[0].point.coordinates[1]
+                        };
                     }
                 }
             }

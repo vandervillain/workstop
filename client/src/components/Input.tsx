@@ -1,9 +1,17 @@
 import * as React from 'react';
-import { OptionButtonInput } from './OptionButton';
 
 export interface P {
-  value: OptionButtonInput;
-  onDone: (name: string, value: any) => void;
+  inputRef?;
+  type: string;
+  name: string;
+  label?: string;
+  min?: number;
+  max?: number;
+  required: boolean;
+  defaultValue?;
+  map?: number[];
+  onFocus?: (e) => void;
+  onDone?: (name: string, value: any) => void;
 }
 
 interface S {}
@@ -14,18 +22,29 @@ export class Input extends React.Component<P, S> {
   constructor(props: P) {
     super(props);
 
-    this.inputRef = React.createRef();
+    this.inputRef = this.props.inputRef ? this.props.inputRef : React.createRef();
   }
 
   ifEnterClose(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (this.props.onDone && (e.which == 13 || e.keyCode == 13)) {
-      this.props.onDone(this.inputRef.current.name, this.inputRef.current.value);
+    if (e.which == 13 || e.keyCode == 13) {
+      e.preventDefault();
+      if (this.props.onDone) {
+        this.props.onDone(this.inputRef.current.name, this.inputRef.current.value);
+      }
     }
   }
 
   public render() {
     return (      
-      <div><span className="input-label">{this.props.value.label}</span><input ref={this.inputRef} type={this.props.value.type} min={this.props.value.min} max={this.props.value.max} name={this.props.value.name} onKeyDown={(e) => this.ifEnterClose(e)} defaultValue={this.props.value.value} /></div>
+      <div className="input">
+        {this.props.label && 
+          <span className="label">{this.props.label}</span>
+        }
+        <input ref={this.inputRef} type={this.props.type} required={this.props.required} min={this.props.min} max={this.props.max} name={this.props.name} onKeyDown={(e) => this.ifEnterClose(e)} onFocus={(e) => this.props.onFocus ? this.props.onFocus(e) : true} defaultValue={this.props.defaultValue} />
+        { this.props.required && 
+          <span className="required">*</span>
+        }
+      </div>
     );
   }
 }

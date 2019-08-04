@@ -18,7 +18,7 @@ export interface QuerySettings {
 export class BusinessLogic {
 
     populateDb() {
-        var user = new User({first: "Aaron", last: "Vanderwielen", email: "AaronVander@live.com" });
+        var user = new User({name: "Aaron Vanderwielen", email: "AaronVander@live.com" });
         user.save();
 
         var categories = [
@@ -160,9 +160,20 @@ export class BusinessLogic {
             user: postObj.user,
             category: postObj.category,
             city: postObj.city,
-            state: 'WA'
+            state: 'WA',
+            date_created: new Date(),
+            comments: []
         });
-        return await post.save(this.rtn);
+        return await getGpsCoords(null, postObj.city, postObj.address)
+            .then((loc: {lat: number, long: number}) => {
+                if (loc) {
+                    post.location = {
+                        type: 'Point',
+                        coordinates: [loc.long, loc.lat]
+                    }
+                    return post.save().then(p => p);
+                }
+            });
     }
 }
 

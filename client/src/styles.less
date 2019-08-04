@@ -85,22 +85,24 @@ span.plus {
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
 }
- 
+
 .autocomplete {
-    background-color: #fff;
-    border: 1px solid #c8c8c8;
-    border-radius: 3px;
-    -webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    transition: all 0.2s linear;
-}
+    .autocomplete-input {
+        background-color: #fff;
+        border: 1px solid #c8c8c8;
+        border-radius: 3px;
+        -webkit-transition: all 0.2s linear;
+        -moz-transition: all 0.2s linear;
+        transition: all 0.2s linear;
+    }
 
-.autocomplete-items {
-    > div {
-        cursor: pointer;
+    .autocomplete-items {
+        > div {
+            cursor: pointer;
 
-        &:hover, &.active {
-            background-color: @blue-accent;
+            &:hover, &.active {
+                background-color: @blue-accent;
+            }
         }
     }
 }
@@ -212,7 +214,7 @@ span.plus {
     }
 }
 
-.link-btn {
+.link-btn, input[type=submit] {
     cursor: pointer;
     background-color: @blue-shade2;
     color: white;
@@ -247,17 +249,22 @@ form {
         .label {
             display: block;
         }
+
+        .required {
+            display: none;
+        }
     }
 
-    input[type=submit] {
-        cursor: pointer;
-        background-color: @blue-shade2;
-        color: white;
-        border: none;
-        margin: 0;
-        padding: @tiny @medium;
+    .buttons {
+        display: -webkit-flex; /* Safari */
+        display: flex;
+    }
+
+    button, input[type=submit] {
+        flex: auto;
     }
 }
+
 .App {
   
 //   .App-logo {
@@ -418,7 +425,7 @@ form {
     }
 
     .post-page {
-        input, textarea {
+        input:not([type=submit]), textarea {
             width: 100%;
         }
     }

@@ -21,8 +21,8 @@ export async function post(url: string, body: any) {
     payload = { 
       method: 'POST', 
       headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     };
@@ -31,4 +31,19 @@ export async function post(url: string, body: any) {
   
   const rawResponse =  await fetch(url, payload);
   return await rawResponse.json();
+}
+
+export async function postFormData(url: string, formData: FormData) {
+  var token = auth.getToken(),
+    payload = { 
+      method: 'POST', 
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData
+    };
+
+  if (token) payload.headers['Authorization'] = "Bearer " + token;
+  
+  return await fetch(url, payload).then(r => r.json());
 }

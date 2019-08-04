@@ -114,7 +114,7 @@ export class OptionButton extends React.Component<P, S> {
 
   isClickOutside(e: MouseEvent) {
     var clickedNode: Node = e.toElement;
-    if (clickedNode != this.div && !this.div.contains(clickedNode)) {
+    if (!this.div || (clickedNode != this.div && !this.div.contains(clickedNode))) {
       this.close();
     }
   }
@@ -125,13 +125,13 @@ export class OptionButton extends React.Component<P, S> {
     var self = this;
     if (o.type == "range")
     {
-      return <RangeInput key={o.name} value={o} onDone={(n, v) => self.setValue(n, v)} />
+      return <RangeInput key={o.name} type={o.type} name={o.name} required={false} min={o.min} max={o.max} defaultValue={o.value} map={o.map} onDone={(n, v) => self.setValue(n, v)} />
     }
     else if (o.type == "autocomplete")
     {
-      return <Autocomplete key={o.name} options={o.options} name={o.name} defaultValue={o.value} onDone={(n, v) => self.setValue(n, v)} />
+      return <Autocomplete key={o.name} required={false} options={o.options} name={o.name} defaultValue={o.value} autofocus={true} onDone={(n, v) => self.setValue(n, v)} />
     }
-    else return <Input key={o.name} value={o} onDone={(n, v) => self.setValue(n, v)} />
+    else return <Input key={o.name} type={o.type} name={o.name} required={false} min={o.min} max={o.max} defaultValue={o.value} onDone={(n, v) => self.setValue(n, v)} />
   }
 
   public render() {

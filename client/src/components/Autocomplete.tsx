@@ -1,10 +1,16 @@
 import * as React from 'react';
 import * as _ from 'lodash';
+import { isDescendant } from 'src/utils/utils';
 
 export interface P {
+  inputRef?;
   name: string;
-  defaultValue: string;
+  required: boolean;
+  label?: string;
+  defaultValue?: string;
   options?: {key: string, value: string}[];
+  autofocus?: boolean;
+  onFocus?: (e) => void;
   onDone?: (name: string, value: any) => void;
 }
 
@@ -15,12 +21,22 @@ export class Autocomplete extends React.Component<P, S> {
 
   constructor(props: P) {
     super(props);
-    this.inputRef = React.createRef();
+    this.inputRef = this.props.inputRef ? this.props.inputRef : React.createRef();
   }
 
   ifEnterClose(e: KeyboardEvent) {
-    if (this.props.onDone && (e.which == 13 || e.keyCode == 13)) {
-      this.props.onDone(this.inputRef.current.name, this.inputRef.current.value);
+    if (e.which == 13 || e.keyCode == 13) {
+      e.preventDefault();
+      if (this.props.onDone) {
+        this.props.onDone(this.inputRef.current.name, this.inputRef.current.value);
+      }
+    }
+  }
+
+  onFocus(e) {
+    e.target.select();
+    if (this.props.onFocus) {
+      this.props.onFocus(e);
     }
   }
 
@@ -28,16 +44,6 @@ export class Autocomplete extends React.Component<P, S> {
     var plugin = this, currentFocus,
       insertAfter = (newNode, referenceNode)  => {
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-      },
-      isDescendant = (parentClass: string, child: HTMLElement) => {
-        var p = child.parentElement;
-        while (p) {
-          if (p.classList && p.classList.contains(parentClass)) {
-              return true;
-          }
-          p = p.parentElement;
-        }
-        return false;
       },
       addActive = (list: any) => {
         if (!list) return false;
@@ -119,14 +125,18 @@ export class Autocomplete extends React.Component<P, S> {
           currentFocus--;
           addActive(list);
         } else if (e.keyCode == 13) { // enter
+          e.preventDefault();
           if (currentFocus > -1) {
-            // prevent the form from being submitted and simulate a click on the "active" item
-            e.preventDefault();
+            // simulate a click on the "active" item
             if (list) list[currentFocus].click();
+            closeAllLists();
           }
           else {
             var match = _.find(plugin.props.options, (o) => o.value.toLowerCase() == input.value.toLowerCase());
-            if (match && plugin.props.onDone) plugin.props.onDone(plugin.props.name, match.value);
+            if (match) {
+              closeAllLists();
+              if (plugin.props.onDone) plugin.props.onDone(plugin.props.name, match.value);
+            }
           }
         }
     });
@@ -138,13 +148,24 @@ export class Autocomplete extends React.Component<P, S> {
   componentDidMount() {
     var input = this.inputRef.current as HTMLInputElement;
     this.autocomplete(input, _.map(this.props.options, (o) => o.value));
-    input.focus();
+
+    if (this.props.autofocus) {
+      input.focus();
+    }
   }
   
   public render()
   {
     return (
-      <input ref={this.inputRef} autoComplete="new-password" type="text" name={this.props.name} className="autocomplete" onFocus={(e) => e.target.select()} defaultValue={this.props.defaultValue} />
+      <div className="autocomplete">
+        {this.props.label && 
+          <span className="label">{this.props.label}</span>
+        }
+        <input ref={this.inputRef} required={this.props.required} autoComplete="off" type="text" name={this.props.name} className="autocomplete-input" onFocus={(e) => this.onFocus(e)} defaultValue={this.props.defaultValue} />
+        { this.props.required &&
+          <span className="required">*</span>
+        }
+      </div>
     )
   }
 }

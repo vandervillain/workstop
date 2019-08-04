@@ -1,4 +1,5 @@
 import express from 'express';
+import { IncomingForm } from 'formidable';
 import { BusinessLogic, QuerySettings } from '../logic/businessLogic';
 
 var router = express.Router();
@@ -21,14 +22,21 @@ router.get('/post/:id', function(req, res) {
     bl.getPost(req.params.id).then(r => res.json(r));
 });
 
+// create
+router.post('/post', function(req, res) { 
+    var form = new IncomingForm();
+    form.parse(req, (e, fields, files) => {
+        if (!e) {
+            var bl = new BusinessLogic();
+            bl.createPost(fields).then(r => res.json(r));
+        }
+    });
+});
+
+// update
 router.post('/post/:id', function(req, res) { 
     var bl = new BusinessLogic();
-    if (req.params.id) { // update
-        res.json({});
-    }
-    else { // create
-        bl.createPost(req.body).then(r => res.json(r));
-    }
+    res.json({});
 });
 
 router.post('/posts', function(req, res) { 
